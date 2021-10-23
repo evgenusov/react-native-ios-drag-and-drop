@@ -1,13 +1,30 @@
 import * as React from 'react';
+import { useState } from 'react';
 
-import { StyleSheet, View } from 'react-native';
-import IosDragAndDropViewManager from 'react-native-ios-drag-and-drop';
+import { StyleSheet, Text, Image } from 'react-native';
+import DragAndDropView from 'react-native-ios-drag-and-drop';
 
 export default function App() {
+  const [draggedImage, SetDraggedImage] = useState();
+
+
+  const onDrag = ({nativeEvent}) => {
+    SetDraggedImage(nativeEvent.url);
+  }
+
+
   return (
-    <View style={styles.container}>
-      <IosDragAndDropViewManager color="#32a852" style={styles.box} />
-    </View>
+    <DragAndDropView style={styles.box} enabled={true} onDrag={onDrag}>
+      <Text>Drag image here</Text>
+      {draggedImage && (
+        <Image source={{
+          uri: draggedImage
+        }} style={{
+          width: 300,
+          height: 300,
+        }}/>
+      )}
+    </DragAndDropView>
   );
 }
 
@@ -18,8 +35,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
