@@ -69,7 +69,7 @@ class IosDragAndDropView : UIView, UIDropInteractionDelegate {
                     let imageData = draggedImage.jpegData(compressionQuality: 0.7);
                     let timeInterval = NSDate().timeIntervalSince1970
                     let timeIntervalInString = formatter.string(from: timeInterval)!;
-                    let name =  timeIntervalInString + ".jpeg";
+                    let name =  timeIntervalInString.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: ":", with: "") + ".jpeg";
                     
                     guard let imageURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(name) else {
                         return
