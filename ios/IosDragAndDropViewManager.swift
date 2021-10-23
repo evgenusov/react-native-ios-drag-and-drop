@@ -1,4 +1,5 @@
 import Foundation
+
 @objc(IosDragAndDropViewManager)
 class IosDragAndDropViewManager: RCTViewManager {
     
@@ -8,7 +9,7 @@ class IosDragAndDropViewManager: RCTViewManager {
 }
 
 class IosDragAndDropView : UIView, UIDropInteractionDelegate {
-    @objc var onDrag: RCTBubblingEventBlock? = nil;
+    @objc var onDrop: RCTBubblingEventBlock? = nil;
     @objc var color: String = "" {
         didSet {
             self.backgroundColor = hexStringToUIColor(hexColor: color)
@@ -55,7 +56,8 @@ class IosDragAndDropView : UIView, UIDropInteractionDelegate {
     
     @available(iOS 11.0, *)
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        // 1
+        let formatter = DateComponentsFormatter()
+
         for dragItem in session.items {
             // 2
             dragItem.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { object, error in
@@ -65,16 +67,23 @@ class IosDragAndDropView : UIView, UIDropInteractionDelegate {
                 // 4
                 DispatchQueue.main.async {
                     let imageData = draggedImage.jpegData(compressionQuality: 0.7);
-                    guard let imageURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("TempImage.png") else {
+                    let timeInterval = NSDate().timeIntervalSince1970
+                    let timeIntervalInString = formatter.string(from: timeInterval)!;
+                    let name =  timeIntervalInString + ".jpeg";
+                    
+                    guard let imageURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(name) else {
                         return
                     }
                     do {
-                        try imageData!.write(to: imageURL)
+                        try imageData!.write(to: imageURL, options: Data.WritingOptions.atomic)
                         
-                        if self.onDrag != nil {
-                            
-                            self.onDrag!([
-                                "url": imageURL.absoluteString
+                        if self.onDrop != nil {
+                            self.onDrop!([
+                                "url": imageURL.absoluteString,
+                                "width": draggedImage.size.width,
+                                "height": draggedImage.size.height,
+                                "mime": "image/jpeg",
+                                "size": imageData?.count ?? 0
                             ])
                         }
                     } catch {

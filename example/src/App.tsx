@@ -1,28 +1,33 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { StyleSheet, Text, Image } from 'react-native';
-import DragAndDropView from 'react-native-ios-drag-and-drop';
+import { StyleSheet, Text, Image, NativeSyntheticEvent } from 'react-native';
+import { DragAndDropView, DropEvent } from 'react-native-ios-drag-and-drop';
 
 export default function App() {
-  const [draggedImage, SetDraggedImage] = useState();
+  const [draggedImage, SetDraggedImage] = useState<DropEvent | null>();
 
-
-  const onDrag = ({nativeEvent}) => {
-    SetDraggedImage(nativeEvent.url);
-  }
-
+  const onDrop = ({ nativeEvent }: NativeSyntheticEvent<DropEvent>) => {
+    SetDraggedImage(nativeEvent);
+  };
 
   return (
-    <DragAndDropView style={styles.box} enabled={true} onDrag={onDrag}>
+    <DragAndDropView style={styles.box} enabled={true} onDrop={onDrop}>
       <Text>Drag image here</Text>
       {draggedImage && (
-        <Image source={{
-          uri: draggedImage
-        }} style={{
-          width: 300,
-          height: 300,
-        }}/>
+        <>
+          <Image
+            resizeMode="contain"
+            source={{
+              uri: draggedImage.url,
+            }}
+            style={{
+              width: 300,
+              height: 400,
+            }}
+          />
+          <Text>Data: {JSON.stringify(draggedImage)}</Text>
+        </>
       )}
     </DragAndDropView>
   );

@@ -1,14 +1,22 @@
-import { requireNativeComponent, ViewStyle } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  requireNativeComponent,
+  ViewStyle,
+} from 'react-native';
 
-type IosDragAndDropProps = {
-  color: string;
+export type DropEvent = {
+  url: string;
+  width: number;
+  height: number;
+  size: number;
+  mime: string;
+};
+
+type DragAndDropViewProps = {
   enabled: boolean;
-  onDrag: (event: any) => void;
+  onDrop: (event: NativeSyntheticEvent<DropEvent>) => void;
   style: ViewStyle;
 };
 
-export const IosDragAndDropViewManager = requireNativeComponent<IosDragAndDropProps>(
-'IosDragAndDropView'
-);
-
-export default IosDragAndDropViewManager;
+export const DragAndDropView =
+  requireNativeComponent<DragAndDropViewProps>('IosDragAndDropView');
