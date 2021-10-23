@@ -8,6 +8,8 @@ Implementation iOS drag and drop feature for React Native
 yarn add react-native-ios-drag-and-drop
 ```
 
+## Example
+![IMG_42544228c8a2ac85df03.gif](https://media.giphy.com/media/R0OXcnvMYSS6Hl5IOd/giphy.gif)
 ## Usage
 
 ```tsx
