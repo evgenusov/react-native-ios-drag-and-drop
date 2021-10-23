@@ -1,21 +1,30 @@
 # react-native-ios-drag-and-drop
 
-Implemention iOS drag and drop feature for React Native
+Implementation iOS drag and drop feature for React Native
 
 ## Installation
 
 ```sh
-npm install react-native-ios-drag-and-drop
+yarn add react-native-ios-drag-and-drop
 ```
 
 ## Usage
 
-```js
-import IosDragAndDrop from "react-native-ios-drag-and-drop";
+```tsx
+import { DragAndDropView, DropEvent } from 'react-native-ios-drag-and-drop';
 
-// ...
+// Add View
+<DragAndDropView style={...} enabled={true} onDrop={onDrop}>
+...
+</DragAndDropView>
 
-const result = await IosDragAndDrop.multiply(3, 7);
+// Define onDrop callback
+
+
+const onDrop = ({ nativeEvent }: NativeSyntheticEvent<DropEvent>) => {
+    ...
+};
+
 ```
 
 ## Contributing
